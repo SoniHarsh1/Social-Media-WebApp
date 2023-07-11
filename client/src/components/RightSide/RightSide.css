@@ -18,3 +18,10 @@
 .navIcons>img, svg:hover{
     cursor: pointer;
 }
+
+.r-button{
+    height: 3rem;
+    width: 80%;
+    border-radius: 1rem;
+    align-self: center;
+}

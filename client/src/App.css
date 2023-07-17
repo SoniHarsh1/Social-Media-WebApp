@@ -49,6 +49,13 @@
   /* transform: scale(1.05); */
 }
 
+.button:disabled{
+  background: gray;
+  color: white;
+  border: none;
+  pointer-events: none;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

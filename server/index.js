@@ -8,6 +8,7 @@ import cors from "cors";
 import AuthRoutes from "./Routes/AuthRoutes.js";
 import UserRoutes from "./Routes/UserRoutes.js";
 import PostRoutes from "./Routes/PostRoutes.js";
+import UploadRoutes from "./Routes/UploadRoutes.js";
 
 const app = express();
 
@@ -35,3 +36,4 @@ mongoose
   app.use("/auth", AuthRoutes);
   app.use("/user", UserRoutes);
   app.use("/post", PostRoutes);
+  app.use("/upload", UploadRoutes);

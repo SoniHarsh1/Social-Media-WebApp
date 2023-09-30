@@ -47,7 +47,7 @@ export const updatePost = async (req, res) => {
 
 // delete a Post
 export const deletePost = async (req, res) => {
-    const id = res.params.id;
+    const id = req.params.id;
     const {userId} = req.body;
 
     try{
@@ -78,7 +78,7 @@ export const likePost = async (req, res) => {
         }
         else{
             await post.updateOne({$pull: {likes: userId}});
-            res.status(200).json("Post Disliked");
+            res.status(200).json("Post Unliked");
         }
     }catch(error){
         res.status(500).json(error);
@@ -94,13 +94,13 @@ export const getTimelinePosts = async (req, res) => {
         const followingPosts = await UserModel.aggregate([
         {
                 $match: {
-                _id: new mongoose.Types.ObjectId(userId)
-            }
+                    _id : new mongoose.Types.ObjectId(userId)
+            } 
         },
         {
             $lookup: {
                 from : "posts",
-                localfield: "following",
+                localField: "following",
                 foreignField: "userId",
                 as: "followingPosts"
             }
@@ -112,11 +112,12 @@ export const getTimelinePosts = async (req, res) => {
             }
         }
         ])
-        res.status(200).json(currentUserPosts.concat(...followingPosts[0].followingPosts)
-        .sort((a, b)=> {
+        res.status(200)
+        .json(currentUserPosts.concat(...followingPosts[0].followingPosts)
+        .sort((a, b)=>{
             return b.createdAt - a.createdAt;
         })
-        );
+        )
     }catch(error){
         res.status(500).json(error);
     }

@@ -1,5 +1,5 @@
 import UserModel from "../Models/userModel.js";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 // get a user
 
@@ -30,11 +30,14 @@ export const updateUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(password, salt);
       }
-      const user = await UserModel.findByIdAndUpdate(id, req.body, {
-        new: true,
-      });
-      const { password, ...otherDetails } = user._doc;
-      res.status(200).json(otherDetails);
+      const user = await UserModel.findByIdAndUpdate(id, req.body, {new: true});
+      if (user) {
+        const { password, ...otherDetails } = user._doc;
+        res.status(200).json(otherDetails);
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+      // res.status(200).json(user);
     } catch (error) {
       res.status(500).json(error);
     }

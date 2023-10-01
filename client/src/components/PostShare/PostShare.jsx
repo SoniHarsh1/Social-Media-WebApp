@@ -12,7 +12,7 @@ import { UilTimes } from "@iconscout/react-unicons";
 import "./PostShare.css";
 
 const PostShare = () => {
-  const loading = useSelector((state) => state.postReducer.uploading);
+  const uploading = useSelector((state) => state.postReducer.uploading);
   const dispatch = useDispatch();
   const [image, setImage] = useState(null);
   const imageRef = useRef();
@@ -82,10 +82,10 @@ const PostShare = () => {
           <button
             className="button ps-button"
             onClick={handleSubmit}
-            // disabled={loading}
+            disabled={uploading}
           >
-            {/* {loading ? "Uploading..." : "Share"} */}
-            Share
+            {uploading ? "Uploading..." : "Share"}
+            {/* Share */}
           </button>
           <div style={{ display: "none" }}>
             <input

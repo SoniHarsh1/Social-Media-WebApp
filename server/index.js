@@ -9,8 +9,13 @@ import AuthRoutes from "./Routes/AuthRoutes.js";
 import UserRoutes from "./Routes/UserRoutes.js";
 import PostRoutes from "./Routes/PostRoutes.js";
 import UploadRoutes from "./Routes/UploadRoutes.js";
+import { stat } from "fs";
 
 const app = express();
+
+// to serve images to public
+app.use(express.static('public'));
+app.use("/images", express.static("images"));
 
 // Middleware
 app.use(bodyParser.json({ limit: "30mb", extended: true }));

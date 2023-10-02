@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { uploadImage, uploadPost } from "../../actions/uploadAction.js";
-import ProfileImage from "../../img/profileImg.jpg";
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
 import { UilLocationPoint } from "@iconscout/react-unicons";
@@ -18,6 +17,7 @@ const PostShare = () => {
   const imageRef = useRef();
   const desc = useRef();
   const { user } = useSelector((state) => state.authReducer.authData);
+  const serverPublicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
@@ -55,7 +55,7 @@ const PostShare = () => {
 
   return (
     <div className="PostShare">
-      <img src={ProfileImage} alt="" />
+      <img src={user.profilePicture?serverPublicFolder + user.profilePicture: serverPublicFolder + "defaultProfile.jpg"} alt="" />
       <div>
         <input ref={desc} required type="text" placeholder="What's Happening" />
         <div className="PostOptions">

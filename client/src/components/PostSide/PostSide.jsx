@@ -8,7 +8,7 @@ const PostSide = () => {
   return (
     <div className="PostSide">
         <PostShare />
-        <Posts />
+        <Posts/>
     </div>
   )
 }

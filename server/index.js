@@ -13,7 +13,7 @@ import ChatRoutes from "./Routes/ChatRoutes.js";
 import { stat } from "fs";
 
 const app = express();
-
+dotenv.config();
 // to serve images to public
 app.use(express.static('public'));
 app.use("/images", express.static("images"));
@@ -21,9 +21,18 @@ app.use("/images", express.static("images"));
 // Middleware
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors());
 
-dotenv.config();
+app.use(
+  cors({
+    origin: process.env.CLIENT_LINK,
+    methods: ['GET', 'POST', 'UPDATE', 'PUT'],
+    credentials: true,
+  }),
+)
+
+app.get('/', (req, res) => {
+  res.send('Hello from server')
+})
 
 mongoose
   .connect(process.env.MONGO_DB, {

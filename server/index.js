@@ -10,6 +10,7 @@ import UserRoutes from "./Routes/UserRoutes.js";
 import PostRoutes from "./Routes/PostRoutes.js";
 import UploadRoutes from "./Routes/UploadRoutes.js";
 import ChatRoutes from "./Routes/ChatRoutes.js";
+import MessageRoutes from "./Routes/MessageRoutes.js";
 import { stat } from "fs";
 
 const app = express();
@@ -53,3 +54,4 @@ mongoose
   app.use("/post", PostRoutes);
   app.use("/upload", UploadRoutes);
   app.use("/chat", ChatRoutes);
+  app.use("/message", MessageRoutes);

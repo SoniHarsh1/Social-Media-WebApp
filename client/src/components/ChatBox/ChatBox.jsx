@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getUser } from "../../api/UserRequest";
-import { getMessages } from "../../api/MessageRequest";
+import { getMessages, sendMessage } from "../../api/MessageRequest";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
 
-const ChatBox = ({ chat, currentUserId }) => {
+const ChatBox = ({ chat, currentUserId, setSendMessage, recieveMessage }) => {
   const [userData, setUserData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const scroll = useRef();
 
   // Featching data for header of chat box
   useEffect(() => {
@@ -43,6 +44,39 @@ const ChatBox = ({ chat, currentUserId }) => {
   const handleChange = (newMessage) => {
     setNewMessage(newMessage);
   };
+
+  // handle send message
+  const handleSend = async (e) => {
+    e.preventDefault();
+    const message = {
+      senderId: currentUserId,
+      text: newMessage,
+      chatId: chat._id
+    }
+    // send message to database
+    try{
+      const {data} = await sendMessage(message);
+      setMessages([...messages, data]);
+      setNewMessage("");
+    } catch(error) {
+      console.log(error);
+    }
+    // send message to socket server
+    const recieverId = chat.members.find((member)=> member !== currentUserId);
+    setSendMessage({...message, recieverId});
+  }
+
+  // recieve message from socket server
+  useEffect(() => {
+    if (recieveMessage !== null && recieveMessage.chatId === chat._id) {
+      setMessages([...messages, recieveMessage]);
+    }
+  }, [recieveMessage]);
+
+  // scroll to bottom
+  useEffect(() => {
+    scroll.current?.scrollIntoView({behavior: "smooth"});
+  }, [messages]);
 
   return (
     <>
@@ -81,7 +115,7 @@ const ChatBox = ({ chat, currentUserId }) => {
             <div className="chat-body">
               {messages.map((message) => (
                 <>
-                  <div
+                  <div ref = {scroll}
                     className={
                       message.senderId === currentUserId
                         ? "message own"
@@ -98,7 +132,7 @@ const ChatBox = ({ chat, currentUserId }) => {
             <div className="chat-sender">
               <div>+</div>
               <InputEmoji value={newMessage} onChange={handleChange} />
-              <div className="send-button button">Send</div>
+              <div className="send-button button" onClick={handleSend}>Send</div>
             </div>
           </>
         ) : (
